@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 using System.Threading;
-using System.Collections.Generic;
 
 public class TerrainChunk : MonoBehaviour {
 
@@ -15,10 +12,13 @@ public class TerrainChunk : MonoBehaviour {
 
     private int size;
     private int lod = 25;
+    private bool editor; // true if chunk is created in editor mode
 
     private float[,] heightMap;
 
-    public void Initialize(float[,] heightMap) {
+    public void Initialize(float[,] heightMap, bool editor = false) {
+        this.editor = editor;
+
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         meshCollider = GetComponent<MeshCollider>();
@@ -42,7 +42,7 @@ public class TerrainChunk : MonoBehaviour {
             ThreadStart thread = delegate {
                 MeshData meshData = GetLOD(lod);
                 ChunkData chunkData = new ChunkData(this, meshData);
-                lock(WorldManager.drawMeshQueue) {
+                lock (WorldManager.drawMeshQueue) {
                     WorldManager.drawMeshQueue.Enqueue(chunkData);
                 }
             };
@@ -53,7 +53,11 @@ public class TerrainChunk : MonoBehaviour {
     }
 
     private MeshData GetLOD(int lod) {
-        MeshData meshData = MeshGenerator.GenerateTerrainMesh(heightMap, lod);
+        MeshData meshData;
+        if (editor)
+            meshData = MeshGenerator.GenerateTerrainMesh(heightMap, 1);
+        else
+            meshData = MeshGenerator.GenerateTerrainMesh(heightMap, lod);
         return meshData;
     }
 
