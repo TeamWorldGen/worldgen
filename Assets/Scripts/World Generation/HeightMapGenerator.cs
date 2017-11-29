@@ -59,7 +59,10 @@ public static class HeightMapGenerator {
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 heightMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, heightMap[x, y]);//number between 0 and 1
-                heightMap[x, y] = heightCurve.Evaluate((heightMap[x, y])) * heightMultiplier * (1 - falloffMap[x, y]);
+                float falloffMultiplier = 1;
+                if (falloffMap != null)
+                    falloffMultiplier = 1 - falloffMap[x, y];
+                heightMap[x, y] = heightCurve.Evaluate((heightMap[x, y])) * heightMultiplier * falloffMultiplier;
             }
         }
 

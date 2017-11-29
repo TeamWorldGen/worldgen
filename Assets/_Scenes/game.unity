@@ -763,7 +763,7 @@ MonoBehaviour:
   heightMultiplier: 50
   scale: 50
   octaves: 4
-  persistance: 0.5
+  persistence: 0.5
   lacunarity: 2
   heightCurve:
     serializedVersion: 2
@@ -795,11 +795,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+  useFalloffMap: 1
   player: {fileID: 0}
   chunkPrefab: {fileID: 1279929656076718, guid: b3ce1262764de81489221bbfbce1cd10,
     type: 2}
   parent: {fileID: 821018357}
-  size: 0
+  size: 100
+  chunksPerLineInEditor: 1
 --- !u!4 &1083455274
 Transform:
   m_ObjectHideFlags: 0
