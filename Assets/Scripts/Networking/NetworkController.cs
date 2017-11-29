@@ -120,14 +120,14 @@ public class NetworkController : MonoBehaviour {
         manager.StartHost();
         manager.client.RegisterHandler(100, OnCreateWorld);
 
-        //BuildDynamicWorld();
+        BuildDynamicWorld();
     }
 #endif
 
 #if SERVER || TESTING
     public void BuildDynamicWorld() {
         UnityEngine.Debug.Log("Building dynamic world...");
-        PrefabSpawner.Instance.SpawnTrees(500);
+        PrefabSpawner.Instance.SpawnTrees(500, 2, 10);
     }
 #endif
 

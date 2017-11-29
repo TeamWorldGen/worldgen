@@ -21,11 +21,11 @@ public class PrefabSpawner : MonoBehaviour {
         }
     }
 
-    public void SpawnTrees(int maxAmount) {
+    public void SpawnTrees(int maxAmount, float lowerY, float upperY) {
         int size = WorldManager.Instance.size;
         float[,] heightMap = WorldManager.Instance.heightMap;
         float[,] falloffMap = WorldManager.Instance.falloffMap;
-
+        
         int halfSize = size / 2;
 
         for (int i = 0; i < maxAmount; i++) {
