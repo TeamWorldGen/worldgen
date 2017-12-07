@@ -41,8 +41,10 @@ public class Player : NetworkBehaviour {
             cameraObject = (GameObject)Instantiate(cameraPrefab, transform);
             cameraObject.transform.localPosition = new Vector3(0, 0.5f, 0);
 
-            GameController.Instance.EnableMainCamera(false);
-            GameController.Instance.Player = this;
+            if (GameController.Instance != null) {
+                GameController.Instance.EnableMainCamera(false);
+                GameController.Instance.Player = this;
+            }
             UserInput.Instance.Player = this;
             //CmdSetPlayerName(NetworkController.Instance.localPlayerName);
             CmdSetPlayerName(GlobalStorage.localPlayerName);
@@ -51,7 +53,8 @@ public class Player : NetworkBehaviour {
             MouseLook ml = gameObject.AddComponent<MouseLook>();
             ml.lockCursor = true;
 
-            WorldManager.Instance.player = transform;
+            if (WorldManager.Instance != null)
+                WorldManager.Instance.player = transform;
 
         } else {
             Destroy(cameraObject); // We only need the camera on the local player

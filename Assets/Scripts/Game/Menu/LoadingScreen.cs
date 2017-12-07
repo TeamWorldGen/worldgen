@@ -43,6 +43,8 @@ public class LoadingScreen : MonoBehaviour {
 
     public static bool IsGameLoading {
         get {
+            if (LoadingScreen.instance == null)
+                return false;
             return LoadingScreen.instance.isLoading;
         }
     }

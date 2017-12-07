@@ -26,6 +26,12 @@ public class CustomNetworkManager : NetworkManager {
         Debug.Log("WorldGen message sent to client " + conn.connectionId);
     }
 
+    public override void OnServerDisconnect(NetworkConnection conn) {
+        PrefabSpawner.Instance.RemoveObserver(conn);
+        NetworkServer.DestroyPlayersForConnection(conn);
+        Debug.Log("Client disconnected: " + conn.connectionId);
+    }
+
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {
         Vector3 spawnPoint = new Vector3(0, 50, 0);
         Debug.Log("Spawning player at " + spawnPoint.ToString());
@@ -36,11 +42,6 @@ public class CustomNetworkManager : NetworkManager {
     public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player) {
         base.OnServerRemovePlayer(conn, player);
         Debug.Log("Removing player " + conn.address);
-    }
-
-    public override void OnServerDisconnect(NetworkConnection conn) {
-        NetworkServer.DestroyPlayersForConnection(conn);
-        Debug.Log("Client disconnected: " + conn.connectionId);
     }
 #endif
 

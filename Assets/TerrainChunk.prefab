@@ -116,7 +116,7 @@ MonoBehaviour:
     height: 10
     color: {r: 0.11813366, g: 0.8455882, b: 0.24355689, a: 0}
   - name: Rock
-    height: 30
+    height: 100
     color: {r: 0.5588235, g: 0.5588235, b: 0.5588235, a: 0}
   - name: Snow
     height: 180

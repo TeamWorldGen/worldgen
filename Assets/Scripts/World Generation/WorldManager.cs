@@ -65,6 +65,9 @@ public class WorldManager : MonoBehaviour {
         if (renderDistance < 1) { // Render distance must be greater than 0
             renderDistance = 1;
         }
+        if (chunksPerLine < 1) {
+            chunksPerLine = 1;
+        }
     }
 
 #if CLIENT
@@ -96,8 +99,6 @@ public class WorldManager : MonoBehaviour {
     }
 #endif
 
-#if CLIENT || UNITY_EDITOR
-
     private void Initialize() {
         size = chunkSize * chunksPerLine;
         int length = size / chunkSize;
@@ -108,6 +109,8 @@ public class WorldManager : MonoBehaviour {
             falloffMap = FalloffMapGenerator.GenerateFalloffMap(actualSize);
         heightMap = HeightMapGenerator.GenerateHeightMap(actualSize, seed, scale, octaves, persistence, lacunarity, heightMultiplier, heightCurve, falloffMap);
     }
+
+#if CLIENT || UNITY_EDITOR
 
     public void CreateTerrainChunks() {
         chunks = new TerrainChunk[chunksPerLine, chunksPerLine];
@@ -177,9 +180,9 @@ public class WorldManager : MonoBehaviour {
         switch (dist) {
             case 0:
             case 1:
-                return 1;
+                return 4;
             case 2:
-                return 2;
+                return 4;
             case 3:
                 return 4;
             case 4:

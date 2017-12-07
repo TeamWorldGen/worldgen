@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Networking;
 
 public class PrefabSpawner : MonoBehaviour {
@@ -8,7 +9,9 @@ public class PrefabSpawner : MonoBehaviour {
         get { return instance; }
     }
 
-    public GameObject[] trees;
+    public GameObject[] treePrefabs;
+
+    private HashSet<NetworkVisibility> networkedObjects = new HashSet<NetworkVisibility>();
 
     void Awake() {
         instance = this;
@@ -16,8 +19,14 @@ public class PrefabSpawner : MonoBehaviour {
 
     void Start() {
         Debug.Log("Registering prefabs");
-        foreach (GameObject rock in trees) {
+        foreach (GameObject rock in treePrefabs) {
             ClientScene.RegisterPrefab(rock);
+        }
+    }
+
+    public void RemoveObserver(NetworkConnection connection) {
+        foreach (NetworkVisibility netvis in networkedObjects) {
+            netvis.RemoveObserver(connection);
         }
     }
 
@@ -43,7 +52,7 @@ public class PrefabSpawner : MonoBehaviour {
     }
 
     void SpawnTree(Vector3 pos) {
-        GameObject prefab = trees[Random.Range(0, trees.Length)];
+        GameObject prefab = treePrefabs[Random.Range(0, treePrefabs.Length)];
         float scale = Random.Range(0.5f, 1.5f);
         Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
         GameObject tree = Instantiate(prefab, pos, rotation);

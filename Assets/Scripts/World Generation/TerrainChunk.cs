@@ -55,7 +55,7 @@ public class TerrainChunk : MonoBehaviour {
     private MeshData GetLOD(int lod) {
         MeshData meshData;
         if (editor)
-            meshData = MeshGenerator.GenerateTerrainMesh(heightMap, 1);
+            meshData = MeshGenerator.GenerateTerrainMesh(heightMap, 4);
         else
             meshData = MeshGenerator.GenerateTerrainMesh(heightMap, lod);
         return meshData;

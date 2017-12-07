@@ -37,8 +37,8 @@ public static class HeightMapGenerator {
                 for (int i = 0; i < octaves; i++) {
 
                     //sample the width and height values
-                    float sampleX = (x - halfWidth) / scale * frequency + octaveOffsets[i].x;
-                    float sampleY = (y - halfHeight) / scale * frequency + octaveOffsets[i].y;
+                    float sampleX = (x - halfWidth) * (1 / scale) * frequency + octaveOffsets[i].x;
+                    float sampleY = (y - halfHeight) * (1 / scale) * frequency + octaveOffsets[i].y;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;//(*2-1) lets the PerlinValue be able to be less than 0, as PerlinNoise generally just gives a number between 0 and 1
                     noiseHeight += perlinValue * amplitude;
