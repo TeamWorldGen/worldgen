@@ -15,21 +15,27 @@ public class TerrainChunk : MonoBehaviour {
     private bool editor; // true if chunk is created in editor mode
 
     private float[,] heightMap;
+    private float[,] tempMap;
+    private float[,] humidityMap;
 
-    public void Initialize(float[,] heightMap, bool editor = false) {
+    public void Initialize(int size, int offsetX, int offsetY, bool editor = false) {
         this.editor = editor;
 
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         meshCollider = GetComponent<MeshCollider>();
-        this.heightMap = heightMap;
-        size = heightMap.GetLength(0) - 1;
+
+        this.size = size;
+        float[,] falloffMap = FalloffMapGenerator.GetLocalFalloffMap(size, offsetX, offsetY);
+        this.heightMap = HeightMapGenerator.GetLocalHeightMap(size, offsetX, offsetY, falloffMap);
 
         // Create collider for this chunk
         CreateCollider();
 
         // Set the base texture for this chunk
-        SetTexture(GetColorMap());
+        float[,] tempMap = BiomeMapGenerator.GetLocalTempMap(size, offsetX, offsetY);
+        float[,] humidityMap = BiomeMapGenerator.GetLocalHumidityMap(size, offsetX, offsetY);
+        SetTexture(GetColorMap(tempMap, humidityMap));
 
         // Update the mesh of this chunk
         UpdateMesh(GetLOD(lod));
@@ -61,8 +67,25 @@ public class TerrainChunk : MonoBehaviour {
         return meshData;
     }
 
-    private Color[] GetColorMap() {
+    private Color[] GetColorMap(float[,] tempMap, float[,] humidityMap) {
         Color[] colorMap = new Color[size * size];
+
+        /*
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+
+                float temp = tempMap[x, y];
+                float humidity = humidityMap[x, y];
+
+                float red = temp;
+                float green = humidity;
+                float blue = 1 - temp;
+
+                colorMap[y * size + x] = new Color(red, green, blue);
+            }
+        }
+        */
+
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 float currentHeight = heightMap[x, y];
@@ -83,7 +106,7 @@ public class TerrainChunk : MonoBehaviour {
     }
 
     public void CreateCollider() {
-        MeshData meshData = MeshGenerator.GenerateTerrainMesh(heightMap, 1);
+        MeshData meshData = MeshGenerator.GenerateTerrainMesh(heightMap, 4);
         Mesh mesh = meshData.CreateMesh();
         meshCollider.sharedMesh = mesh;
     }

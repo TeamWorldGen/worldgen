@@ -519,6 +519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treePrefabs:
   - {fileID: 1566147312119754, guid: 205de3015e533274589c2181e03e3e06, type: 2}
+  - {fileID: 1268770117041160, guid: dae7449b81528264c8632b9420985834, type: 2}
 --- !u!4 &622797785
 Transform:
   m_ObjectHideFlags: 0
@@ -739,6 +740,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1083455274}
   - component: {fileID: 1083455273}
+  - component: {fileID: 1083455275}
   m_Layer: 0
   m_Name: _WorldManager
   m_TagString: Untagged
@@ -761,7 +763,7 @@ MonoBehaviour:
   renderDistance: 5
   seed: 0
   heightMultiplier: 200
-  scale: 300
+  scale: 400
   octaves: 4
   persistence: 0.5
   lacunarity: 2
@@ -770,9 +772,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      value: 0.0005340576
+      inSlope: 0.22430553
+      outSlope: 0.22430553
       tangentMode: 0
     - serializedVersion: 2
       time: 0.43269366
@@ -796,6 +798,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   useFalloffMap: 1
+  falloffMapTexture: {fileID: 2800000, guid: 60455667273a8ee4cad5c5850f4eb382, type: 3}
   player: {fileID: 0}
   chunkPrefab: {fileID: 1279929656076718, guid: b3ce1262764de81489221bbfbce1cd10,
     type: 2}
@@ -815,6 +818,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1083455275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1083455272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3b88e7ea9ce9e34b954fb4fc9aae819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1289095674
 GameObject:
   m_ObjectHideFlags: 0

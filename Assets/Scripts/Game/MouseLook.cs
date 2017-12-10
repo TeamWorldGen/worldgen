@@ -4,6 +4,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class MouseLook : MonoBehaviour {
 
+    public bool enabled = true;
+
     private static MouseLook instance;
     public static MouseLook Instance {
         get { return instance; }
@@ -48,6 +50,9 @@ public class MouseLook : MonoBehaviour {
     }
 
     void Update() {
+
+        if (!enabled)
+            return;
 
         if (camObject == null)
             return;

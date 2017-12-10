@@ -2,26 +2,21 @@
 
 public static class FalloffMapGenerator {
 
-    // TODO: Improve this ugly function
-    public static float[,] GenerateFalloffMap(int size) {
+    public static int mapSize;
+    public static Texture2D texture;
+
+    public static float[,] GetLocalFalloffMap(int size, int offsetX, int offsetY) {
         float[,] falloffMap = new float[size, size];
 
-        int halfSize = size / 2;
+        float multiplier = (float)texture.width / (float)mapSize;
 
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
 
-                float distX = (halfSize - x) * (halfSize - x);
-                float distY = (halfSize - y) * (halfSize - y);
+                int hx = Mathf.FloorToInt((x + offsetX) * multiplier);
+                int hy = Mathf.FloorToInt((y + offsetY) * multiplier);
 
-                float distToCenter = Mathf.Sqrt(distX + distY) / halfSize;
-
-                if (distToCenter > 1)
-                    distToCenter = 1;
-                else if (distToCenter < 0)
-                    distToCenter = 0;
-
-                falloffMap[x, y] = distToCenter;
+                falloffMap[x, y] = texture.GetPixel(hx, hy).grayscale;
             }
         }
 

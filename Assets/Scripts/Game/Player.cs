@@ -85,6 +85,10 @@ public class Player : NetworkBehaviour {
         }
     }
 
+    public void SetKinematic(bool value) {
+        rb.isKinematic = value;
+    }
+
     public bool IsGrounded() {
         return Physics.Raycast(transform.position, -Vector3.up, 1.1f);
     }
