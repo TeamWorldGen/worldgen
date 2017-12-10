@@ -773,8 +773,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 0
       value: 0.0005340576
-      inSlope: 0.22430553
-      outSlope: 0.22430553
+      inSlope: -0.05499798
+      outSlope: -0.05499798
       tangentMode: 0
     - serializedVersion: 2
       time: 0.43269366
@@ -804,6 +804,8 @@ MonoBehaviour:
     type: 2}
   parent: {fileID: 821018357}
   size: 500
+  actualSize: 505
+  actualChunkSize: 101
   chunksPerLineInEditor: 5
 --- !u!4 &1083455274
 Transform:

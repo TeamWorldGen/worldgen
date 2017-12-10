@@ -31,29 +31,26 @@ public class PrefabSpawner : MonoBehaviour {
     }
 
     public void SpawnTrees(int maxAmount, float lowerY, float upperY) {
+
         int size = WorldManager.Instance.size;
-
-        // TODO: Prefab spawning is broken. Fix it.
-
-        /*
-        float[,] heightMap = WorldManager.Instance.heightMap;
-        float[,] falloffMap = WorldManager.Instance.falloffMap;
-        
         int halfSize = size / 2;
+        int actualSize = WorldManager.Instance.actualSize;
+
+        float[,] falloffMap = FalloffMapGenerator.GetFalloffMap(actualSize, 0, 0);
+        float[,] heightMap = HeightMapGenerator.GetHeightMap(actualSize, 0, 0, falloffMap);
 
         for (int i = 0; i < maxAmount; i++) {
 
-            int x = Random.Range(0, heightMap.GetLength(0) - 1);
-            int z = Random.Range(0, heightMap.GetLength(1) - 1);
+            int x = Random.Range(0, size);
+            int z = Random.Range(0, size);
 
             float xPos = x - halfSize;
-            float zPos = z - halfSize;
+            float zPos = (size - z) - halfSize;
             float yPos = heightMap[x, z];
 
-            Vector3 pos = new Vector3(xPos, yPos, halfSize-z);
+            Vector3 pos = new Vector3(xPos, yPos, halfSize - z);
             SpawnTree(pos);
         }
-        */
     }
 
     void SpawnTree(Vector3 pos) {

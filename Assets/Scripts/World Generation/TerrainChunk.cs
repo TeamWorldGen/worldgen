@@ -18,16 +18,22 @@ public class TerrainChunk : MonoBehaviour {
     private float[,] tempMap;
     private float[,] humidityMap;
 
+    public int offsetX, offsetY;
+
     public void Initialize(int size, int offsetX, int offsetY, bool editor = false) {
         this.editor = editor;
+
+        // for debugging
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
 
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         meshCollider = GetComponent<MeshCollider>();
 
         this.size = size;
-        float[,] falloffMap = FalloffMapGenerator.GetLocalFalloffMap(size, offsetX, offsetY);
-        this.heightMap = HeightMapGenerator.GetLocalHeightMap(size, offsetX, offsetY, falloffMap);
+        float[,] falloffMap = FalloffMapGenerator.GetFalloffMap(size, offsetX, offsetY);
+        this.heightMap = HeightMapGenerator.GetHeightMap(size, offsetX, offsetY, falloffMap);
 
         // Create collider for this chunk
         CreateCollider();

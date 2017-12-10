@@ -9,7 +9,7 @@ public class WorldManager : MonoBehaviour {
         get { return instance; }
     }
 
-    private int chunkSize = 100;
+    public readonly int chunkSize = 100;
     [Header("Chunk Settings")]
     public int chunksPerLine = 5;
     public int renderDistance = 5;
@@ -34,8 +34,8 @@ public class WorldManager : MonoBehaviour {
     private TerrainChunk[,] chunks;
 
     public int size;
-    private int actualSize;
-    private int actualChunkSize;
+    public int actualSize;
+    public int actualChunkSize;
 
     public static Queue<ChunkData> drawMeshQueue = new Queue<ChunkData>();
     private Queue<ChunkPos> createChunkQueue = new Queue<ChunkPos>();
@@ -134,14 +134,14 @@ public class WorldManager : MonoBehaviour {
         float startZ = transform.position.z + (size / 2) - (chunkSize / 2);
         Vector3 spawnPos = new Vector3(startX + chunkSize * x, 0, startZ - chunkSize * y);
 
-        // Spawn the chunk and generate its terrain
+        // Spawn the chunk
         TerrainChunk chunk = Instantiate(chunkPrefab, spawnPos, Quaternion.identity).GetComponent<TerrainChunk>();
         chunk.transform.parent = parent;
 
         // Initialize the chunk
         int offsetX = x * chunkSize;
         int offsetY = y * chunkSize;
-        chunk.Initialize(chunkSize + 1, offsetX, offsetY, editor);
+        chunk.Initialize(actualChunkSize, offsetX, offsetY, editor);
 
         chunks[x, y] = chunk;
     }

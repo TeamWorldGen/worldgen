@@ -10,11 +10,20 @@ public static class HeightMapGenerator {
     public static float heightMultiplier;
     public static AnimationCurve heightCurve;
 
-    public static float[,] GetLocalHeightMap(int size, int offsetX, int offsetY, float[,] falloffMap) {
+    public static float[,] GetHeightMap(int size, int offsetX, int offsetY, float[,] falloffMap) {
         float[,] heightMap = new float[size, size];
 
+        /*
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                float sampleX = (float)(offsetX + x) / 100f;
+                float sampleY = (float)(offsetY + y) / 100f;
+                heightMap[x, y] = Mathf.PerlinNoise(sampleX, sampleY) * heightMultiplier;
+            }
+        }
+        */
+
         float amplitude = 1;
-        float frequency = 1;
         float maxHeight = 0;
 
         System.Random prng = new System.Random(seed);
@@ -33,27 +42,20 @@ public static class HeightMapGenerator {
             scale = 0.0001f;
         }
 
-        float maxNoiseHeight = float.MinValue;
-        float minNoiseHeight = float.MaxValue;
-
-        //makes changes of noise scale focus to the middle of the screen, instead of top right corner
-        float halfWidth = size / 2f;
-        float halfHeight = size / 2f;
-
         //loop through the noise map
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
 
                 amplitude = 1;
-                frequency = 1;
+                float frequency = 1;
                 float noiseHeight = 0;
 
                 //work done for each iteration, each on more specific level than the previous, calculated by amplitude, frequency and noiseHeight
                 for (int i = 0; i < octaves; i++) {
 
                     //sample the width and height values
-                    float sampleX = (x - halfWidth + octaveOffsets[i].x) * (1 / scale) * frequency;
-                    float sampleY = (y - halfHeight + octaveOffsets[i].y) * (1 / scale) * frequency;
+                    float sampleX = (x + octaveOffsets[i].x) * (1 / scale) * frequency;
+                    float sampleY = (y + octaveOffsets[i].y) * (1 / scale) * frequency;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;//(*2-1) lets the PerlinValue be able to be less than 0, as PerlinNoise generally just gives a number between 0 and 1
                     noiseHeight += perlinValue * amplitude;
@@ -61,12 +63,7 @@ public static class HeightMapGenerator {
                     amplitude *= persistence;//decreases
                     frequency *= lacunarity;//increases
                 }
-                //general handling for max and min values
-                if (noiseHeight > maxNoiseHeight) {
-                    maxNoiseHeight = noiseHeight;
-                } else if (noiseHeight < minNoiseHeight) {
-                    minNoiseHeight = noiseHeight;
-                }
+
                 heightMap[x, y] = noiseHeight;
 
                 float falloffMultiplier = 1;
