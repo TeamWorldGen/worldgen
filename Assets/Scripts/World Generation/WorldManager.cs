@@ -113,6 +113,8 @@ public class WorldManager : MonoBehaviour {
 
         FalloffMapGenerator.mapSize = actualSize;
         FalloffMapGenerator.texture = falloffMapTexture;
+
+        BiomeMapGenerator.mapSize = actualSize;
     }
 
 #if CLIENT || UNITY_EDITOR

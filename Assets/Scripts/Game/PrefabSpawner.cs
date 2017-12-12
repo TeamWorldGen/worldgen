@@ -45,15 +45,16 @@ public class PrefabSpawner : MonoBehaviour {
             int z = Random.Range(0, size);
 
             float xPos = x - halfSize;
-            float zPos = (size - z) - halfSize;
+            float zPos = halfSize - z;
             float yPos = heightMap[x, z];
 
-            Vector3 pos = new Vector3(xPos, yPos, halfSize - z);
+            //Vector3 pos = new Vector3(xPos, yPos, halfSize - z);
+            Vector3 pos = new Vector3(xPos, yPos, zPos);
             SpawnTree(pos);
         }
     }
 
-    void SpawnTree(Vector3 pos) {
+    public void SpawnTree(Vector3 pos) {
         GameObject prefab = treePrefabs[Random.Range(0, treePrefabs.Length)];
         float scale = Random.Range(0.5f, 1.5f);
         Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);

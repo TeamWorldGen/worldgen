@@ -33,7 +33,7 @@ public class CustomNetworkManager : NetworkManager {
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {
-        Vector3 spawnPoint = new Vector3(0, 50, 0);
+        Vector3 spawnPoint = new Vector3(0, 100, 0);
         Debug.Log("Spawning player at " + spawnPoint.ToString());
         GameObject player = (GameObject)Instantiate(playerPrefab, spawnPoint, Quaternion.identity);
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);

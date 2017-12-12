@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 23241780842340302}
   - component: {fileID: 64616497714330980}
   - component: {fileID: 114385785917648252}
+  - component: {fileID: 114205788082773438}
   m_Layer: 0
   m_Name: TerrainChunk
   m_TagString: TerrainChunk
@@ -96,6 +97,24 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 0}
+--- !u!114 &114205788082773438
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1279929656076718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dbbd4c761d03ac4682618c4ae3d498f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startAmount: 10
+  maxAmount: 100
+  treeLine: 38
+  maxFailedAttempts: 20
+  vegetation:
+  - {fileID: 114652023081399606, guid: 205de3015e533274589c2181e03e3e06, type: 2}
+  - {fileID: 114816355658349060, guid: dae7449b81528264c8632b9420985834, type: 2}
 --- !u!114 &114385785917648252
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -113,7 +132,7 @@ MonoBehaviour:
     height: 2
     color: {r: 0.9191176, g: 0.80026627, b: 0.4122513, a: 0}
   - name: Grass
-    height: 10
+    height: 40
     color: {r: 0.11813366, g: 0.8455882, b: 0.24355689, a: 0}
   - name: Rock
     height: 100
@@ -121,3 +140,6 @@ MonoBehaviour:
   - name: Snow
     height: 180
     color: {r: 1, g: 1, b: 1, a: 0}
+  size: 0
+  offsetX: 0
+  offsetY: 0

@@ -10,15 +10,17 @@ public class TerrainChunk : MonoBehaviour {
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
 
-    private int size;
+    public int size;
     private int lod = 25;
     private bool editor; // true if chunk is created in editor mode
 
-    private float[,] heightMap;
-    private float[,] tempMap;
-    private float[,] humidityMap;
+    public float[,] heightMap;
+    public float[,] tempMap;
+    public float[,] humidityMap;
 
     public int offsetX, offsetY;
+
+    private ChunkVegetation vegetation;
 
     public void Initialize(int size, int offsetX, int offsetY, bool editor = false) {
         this.editor = editor;
@@ -33,18 +35,22 @@ public class TerrainChunk : MonoBehaviour {
 
         this.size = size;
         float[,] falloffMap = FalloffMapGenerator.GetFalloffMap(size, offsetX, offsetY);
-        this.heightMap = HeightMapGenerator.GetHeightMap(size, offsetX, offsetY, falloffMap);
+        heightMap = HeightMapGenerator.GetHeightMap(size, offsetX, offsetY, falloffMap);
 
         // Create collider for this chunk
         CreateCollider();
 
         // Set the base texture for this chunk
-        float[,] tempMap = BiomeMapGenerator.GetLocalTempMap(size, offsetX, offsetY);
-        float[,] humidityMap = BiomeMapGenerator.GetLocalHumidityMap(size, offsetX, offsetY);
+        tempMap = BiomeMapGenerator.GetLocalTempMap(size, offsetX, offsetY);
+        humidityMap = BiomeMapGenerator.GetLocalHumidityMap(size, offsetX, offsetY);
         SetTexture(GetColorMap(tempMap, humidityMap));
 
         // Update the mesh of this chunk
         UpdateMesh(GetLOD(lod));
+
+        vegetation = GetComponent<ChunkVegetation>();
+        if (vegetation != null)
+            vegetation.Initialize();
     }
 
     public void UpdateChunk(int lod, bool active) {
@@ -59,6 +65,11 @@ public class TerrainChunk : MonoBehaviour {
                 }
             };
             new Thread(thread).Start();
+
+            ResetVegetation();
+            if (lod <= 4)
+                BuildVegetation();
+
         }
 
         gameObject.SetActive(active);
@@ -103,6 +114,7 @@ public class TerrainChunk : MonoBehaviour {
                 }
             }
         }
+
         return colorMap;
     }
 
@@ -129,6 +141,16 @@ public class TerrainChunk : MonoBehaviour {
         bool x = pos.x >= transform.position.x - halfSize && pos.x < transform.position.x + halfSize;
         bool z = pos.z >= transform.position.z - halfSize && pos.z < transform.position.z + halfSize;
         return x && z;
+    }
+
+    public void BuildVegetation() {
+        if (vegetation != null)
+            vegetation.BuildVegetation();
+    }
+
+    public void ResetVegetation() {
+        if (vegetation != null)
+            vegetation.ResetVegetation();
     }
 
 }

@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b2c8aaacc67ea42b74758e079de4bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 100
+  radius: 1000
   updateInterval: 1
 --- !u!114 &114336665340411508
 MonoBehaviour:
