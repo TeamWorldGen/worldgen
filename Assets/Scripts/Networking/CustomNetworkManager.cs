@@ -27,7 +27,6 @@ public class CustomNetworkManager : NetworkManager {
     }
 
     public override void OnServerDisconnect(NetworkConnection conn) {
-        PrefabSpawner.Instance.RemoveObserver(conn);
         NetworkServer.DestroyPlayersForConnection(conn);
         Debug.Log("Client disconnected: " + conn.connectionId);
     }

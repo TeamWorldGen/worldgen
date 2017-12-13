@@ -112,9 +112,7 @@ MonoBehaviour:
   maxAmount: 100
   treeLine: 38
   maxFailedAttempts: 20
-  vegetation:
-  - {fileID: 114652023081399606, guid: 205de3015e533274589c2181e03e3e06, type: 2}
-  - {fileID: 114816355658349060, guid: dae7449b81528264c8632b9420985834, type: 2}
+  vegetation: []
 --- !u!114 &114385785917648252
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -126,9 +126,10 @@ public class NetworkController : MonoBehaviour {
 
 #if SERVER || TESTING
     public void BuildDynamicWorld() {
+        WorldManager.Instance.Initialize();
         UnityEngine.Debug.Log("Building dynamic world...");
-        //PrefabSpawner.Instance.SpawnTrees(500, 2, 10);
-        //VegetationManager.Instance.SpawnTrees(50, 500);
+        NetworkSpawner.Instance.Initialize();
+        NetworkSpawner.Instance.BuildVegetation();
     }
 #endif
 

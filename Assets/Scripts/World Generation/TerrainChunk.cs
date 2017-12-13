@@ -98,7 +98,7 @@ public class TerrainChunk : MonoBehaviour {
                 float green = humidity;
                 float blue = 1 - temp;
 
-                colorMap[y * size + x] = new Color(red, green, blue);
+                colorMap[y * size + x] = new Color(red, 0, 0);
             }
         }
         */

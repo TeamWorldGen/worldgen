@@ -499,6 +499,7 @@ GameObject:
   m_Component:
   - component: {fileID: 622797785}
   - component: {fileID: 622797784}
+  - component: {fileID: 622797786}
   m_Layer: 0
   m_Name: _Spawner
   m_TagString: Untagged
@@ -533,6 +534,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &622797786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 622797783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e2b0241a981cf84d9899a81e16b9966, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectsInWorld: []
+  startAmountMultiplier: 1
+  maxAmountMultiplier: 1
+  treeLine: 40
+  maxFailedAttemptsMultiplier: 10
+  vegetation:
+  - {fileID: 114652023081399606, guid: 205de3015e533274589c2181e03e3e06, type: 2}
+  - {fileID: 114816355658349060, guid: dae7449b81528264c8632b9420985834, type: 2}
 --- !u!1 &789314569
 GameObject:
   m_ObjectHideFlags: 0

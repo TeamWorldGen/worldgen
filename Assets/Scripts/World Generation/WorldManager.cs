@@ -50,7 +50,9 @@ public class WorldManager : MonoBehaviour {
     void Awake() {
         instance = this;
 
-        Initialize();
+#if CLIENT
+        Initialize(); // Initialize locally if this is the client
+#endif
     }
 
     void OnValidate() {
@@ -97,7 +99,9 @@ public class WorldManager : MonoBehaviour {
     }
 #endif
 
-    private void Initialize() {
+    public void Initialize() {
+        print("Initializing world manager...");
+
         size = chunkSize * chunksPerLine;
         actualSize = size + chunksPerLine;
         actualChunkSize = chunkSize + 1;
@@ -120,6 +124,7 @@ public class WorldManager : MonoBehaviour {
 #if CLIENT || UNITY_EDITOR
 
     public void CreateTerrainChunks() {
+        print("Creating terrain chunks...");
         chunks = new TerrainChunk[chunksPerLine, chunksPerLine];
         for (int y = 0; y < chunksPerLine; y++) {
             for (int x = 0; x < chunksPerLine; x++) {
