@@ -39,8 +39,10 @@ public static class VegetationGenerator {
             // Calcualte x and y values for the new plantable to be planted
             int newX = -1, newY = -1;
             while (newX < 0 || newX > size || newY < 0 || newY > size) {
-                newX = spawnInfo.x + rn.Next(5, 20) * (rn.Next(0, 2) * 2 - 1);
-                newY = spawnInfo.y + rn.Next(5, 20) * (rn.Next(0, 2) * 2 - 1);
+                int min = spawnInfo.plantable.spread;
+                int max = spawnInfo.plantable.spread + (spawnInfo.plantable.spread * 2);
+                newX = spawnInfo.x + rn.Next(min, max) * (rn.Next(0, 2) * 2 - 1);
+                newY = spawnInfo.y + rn.Next(min, max) * (rn.Next(0, 2) * 2 - 1);
             }
 
             // Check tree line

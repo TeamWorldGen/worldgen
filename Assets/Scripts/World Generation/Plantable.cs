@@ -6,6 +6,7 @@ public class Plantable : MonoBehaviour {
 
     [Range(0,1)]
     public float fertility = 1;
+    public int spread = 1;
     public float minTemp = 0;
     public float maxTemp = 1;
 

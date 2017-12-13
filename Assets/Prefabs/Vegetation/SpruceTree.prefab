@@ -378,6 +378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fertility: 1
+  spread: 5
   minTemp: 0.1
   maxTemp: 0.5
 --- !u!136 &136655268119481942
