@@ -30,7 +30,7 @@ public class ChunkVegetation : MonoBehaviour {
     }
 
     public void BuildVegetation() {
-        //SpawnPrefabs();
+        SpawnPrefabs();
     }
 
     public void ResetVegetation() {
