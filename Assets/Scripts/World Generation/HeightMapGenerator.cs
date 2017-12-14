@@ -9,6 +9,7 @@ public static class HeightMapGenerator {
     public static float lacunarity;
     public static float heightMultiplier;
     public static AnimationCurve heightCurve;
+    public static bool useFalloffMap;
 
     public static float[,] GetHeightMap(int size, int offsetX, int offsetY, float[,] falloffMap) {
         float[,] heightMap = new float[size, size];
@@ -67,7 +68,7 @@ public static class HeightMapGenerator {
                 heightMap[x, y] = noiseHeight;
 
                 float falloffMultiplier = 1;
-                if (falloffMap != null)
+                if (useFalloffMap && falloffMap != null)
                     falloffMultiplier = falloffMap[x, y];
 
                 float normalized = (heightMap[x, y] + 1) / (maxHeight);

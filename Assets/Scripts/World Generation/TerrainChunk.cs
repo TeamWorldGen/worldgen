@@ -13,6 +13,7 @@ public class TerrainChunk : MonoBehaviour {
     public int size;
     private int lod = 25;
     private bool editor; // true if chunk is created in editor mode
+    private bool isVegetated = false;
 
     public float[,] heightMap;
     public float[,] tempMap;
@@ -66,9 +67,11 @@ public class TerrainChunk : MonoBehaviour {
             };
             new Thread(thread).Start();
 
+            /*
             ResetVegetation();
             if (lod <= 4)
                 BuildVegetation();
+            */
 
         }
 
@@ -144,13 +147,17 @@ public class TerrainChunk : MonoBehaviour {
     }
 
     public void BuildVegetation() {
+        if (isVegetated)
+            return;
         if (vegetation != null)
             vegetation.BuildVegetation();
+        isVegetated = true;
     }
 
     public void ResetVegetation() {
         if (vegetation != null)
             vegetation.ResetVegetation();
+        isVegetated = false;
     }
 
 }

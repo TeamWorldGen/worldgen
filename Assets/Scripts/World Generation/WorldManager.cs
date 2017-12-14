@@ -114,6 +114,7 @@ public class WorldManager : MonoBehaviour {
         HeightMapGenerator.lacunarity = lacunarity;
         HeightMapGenerator.heightMultiplier = heightMultiplier;
         HeightMapGenerator.heightCurve = heightCurve;
+        HeightMapGenerator.useFalloffMap = useFalloffMap;
 
         FalloffMapGenerator.mapSize = actualSize;
         FalloffMapGenerator.texture = falloffMapTexture;
@@ -181,8 +182,13 @@ public class WorldManager : MonoBehaviour {
                 if (dist <= renderDistance) {
                     int lod = GetLOD(dist);
                     UpdateChunk(x, y, true, lod);
+                    if (dist < 2)
+                        chunks[x, y].BuildVegetation();
+                    else
+                        chunks[x, y].ResetVegetation();
                 } else {
                     UpdateChunk(x, y, false, 24);
+                    chunks[x, y].ResetVegetation();
                 }
 
             }
