@@ -61,7 +61,7 @@ public class NetworkSpawner : MonoBehaviour {
         int maxFailedAttempts = 20 * WorldManager.Instance.chunksPerLine * maxFailedAttemptsMultiplier;
 
         // Get spawn list
-        List<SpawnInfo> spawnList = VegetationGenerator.GetSpawnList(vegetation, size, 0, 0, startAmount, maxAmount, maxFailedAttempts, treeLine, heightMap, tempMap, humidityMap);
+        List<PlantableSpawnInfo> spawnList = VegetationGenerator.GetSpawnList(vegetation, size, 0, 0, startAmount, maxAmount, maxFailedAttempts, treeLine, heightMap, tempMap, humidityMap);
 
         if (spawnList == null)
             return;
@@ -69,7 +69,7 @@ public class NetworkSpawner : MonoBehaviour {
         // Spawn plantables from spawn list
         int halfSize = WorldManager.Instance.size / 2;
         for (int i = 0; i < spawnList.Count; i++) {
-            SpawnInfo spawnInfo = spawnList[i];
+            PlantableSpawnInfo spawnInfo = spawnList[i];
             float xPos = spawnInfo.x - halfSize;
             float zPos = halfSize - spawnInfo.y;
             float yPos = heightMap[spawnInfo.x, spawnInfo.y];

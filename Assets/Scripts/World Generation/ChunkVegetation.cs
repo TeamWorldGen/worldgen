@@ -43,12 +43,12 @@ public class ChunkVegetation : MonoBehaviour {
     public void SpawnPrefabs() {
 
         // Get spawn list
-        List<SpawnInfo> spawnList = VegetationGenerator.GetSpawnList(vegetation, size, offsetX, offsetY, startAmount, maxAmount, maxFailedAttempts, treeLine, heightMap, tempMap, humidityMap);
+        List<PlantableSpawnInfo> spawnList = VegetationGenerator.GetSpawnList(vegetation, size, offsetX, offsetY, startAmount, maxAmount, maxFailedAttempts, treeLine, heightMap, tempMap, humidityMap);
 
         // Spawn plantables from spawn list
         int halfSize = WorldManager.Instance.size / 2;
         for (int i = 0; i < spawnList.Count; i++) {
-            SpawnInfo spawnInfo = spawnList[i];
+            PlantableSpawnInfo spawnInfo = spawnList[i];
             float xPos = (offsetX + spawnInfo.x) - halfSize;
             float zPos = halfSize - (offsetY + spawnInfo.y);
             float yPos = heightMap[spawnInfo.x, spawnInfo.y];
