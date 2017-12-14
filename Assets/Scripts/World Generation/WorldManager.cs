@@ -183,12 +183,12 @@ public class WorldManager : MonoBehaviour {
                     int lod = GetLOD(dist);
                     UpdateChunk(x, y, true, lod);
                     if (dist < 2)
-                        chunks[x, y].BuildVegetation();
+                        chunks[x, y].BuildPrefab();
                     else
-                        chunks[x, y].ResetVegetation();
+                        chunks[x, y].ResetPrefab();
                 } else {
                     UpdateChunk(x, y, false, 24);
-                    chunks[x, y].ResetVegetation();
+                    chunks[x, y].ResetPrefab();
                 }
 
             }

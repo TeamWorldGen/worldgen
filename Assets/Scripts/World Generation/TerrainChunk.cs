@@ -13,7 +13,7 @@ public class TerrainChunk : MonoBehaviour {
     public int size;
     private int lod = 25;
     private bool editor; // true if chunk is created in editor mode
-    private bool isVegetated = false;
+    private bool isPopulated = false;
 
     public float[,] heightMap;
     public float[,] tempMap;
@@ -22,6 +22,7 @@ public class TerrainChunk : MonoBehaviour {
     public int offsetX, offsetY;
 
     private ChunkVegetation vegetation;
+    private ChunkRock rock;
 
     public void Initialize(int size, int offsetX, int offsetY, bool editor = false) {
         this.editor = editor;
@@ -52,6 +53,10 @@ public class TerrainChunk : MonoBehaviour {
         vegetation = GetComponent<ChunkVegetation>();
         if (vegetation != null)
             vegetation.Initialize();
+
+        rock = GetComponent<ChunkRock>();
+        if (rock != null)
+            rock.Initialize();
     }
 
     public void UpdateChunk(int lod, bool active) {
@@ -146,18 +151,22 @@ public class TerrainChunk : MonoBehaviour {
         return x && z;
     }
 
-    public void BuildVegetation() {
-        if (isVegetated)
+    public void BuildPrefab() {
+        if (isPopulated)
             return;
         if (vegetation != null)
             vegetation.BuildVegetation();
-        isVegetated = true;
+        if (rock != null)
+            rock.BuildRock();
+        isPopulated = true;
     }
 
-    public void ResetVegetation() {
+    public void ResetPrefab() {
         if (vegetation != null)
             vegetation.ResetVegetation();
-        isVegetated = false;
+        if (rock != null)
+            rock.ResetRock();
+        isPopulated = false;
     }
 
 }

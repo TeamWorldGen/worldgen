@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 64616497714330980}
   - component: {fileID: 114385785917648252}
   - component: {fileID: 114205788082773438}
+  - component: {fileID: 114214236542755906}
   m_Layer: 0
   m_Name: TerrainChunk
   m_TagString: TerrainChunk
@@ -115,6 +116,22 @@ MonoBehaviour:
   vegetation:
   - {fileID: 114962212751413416, guid: 47edb01ea0c70f347a08ec5db70d67ef, type: 2}
   - {fileID: 114317567412530504, guid: 2cff60c52e8ee154b9909a3ffca1305e, type: 2}
+--- !u!114 &114214236542755906
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1279929656076718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ed6d32ef2b7b2469ef54cda1e5c353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startAmount: 10
+  maxAmount: 100
+  maxFailedAttempts: 20
+  rocks:
+  - {fileID: 1207966010623184, guid: 25f10e8838d5dd344b6c0e0c94992f6f, type: 2}
 --- !u!114 &114385785917648252
 MonoBehaviour:
   m_ObjectHideFlags: 1
