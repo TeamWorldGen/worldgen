@@ -108,10 +108,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbbd4c761d03ac4682618c4ae3d498f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startAmount: 10
-  maxAmount: 100
+  startAmount: 15
+  maxAmount: 200
   treeLine: 38
-  maxFailedAttempts: 50
+  maxFailedAttempts: 100
   vegetation:
   - {fileID: 114962212751413416, guid: 47edb01ea0c70f347a08ec5db70d67ef, type: 2}
   - {fileID: 114317567412530504, guid: 2cff60c52e8ee154b9909a3ffca1305e, type: 2}
