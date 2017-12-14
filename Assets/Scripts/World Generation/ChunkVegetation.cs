@@ -45,6 +45,9 @@ public class ChunkVegetation : MonoBehaviour {
         // Get spawn list
         List<PlantableSpawnInfo> spawnList = VegetationGenerator.GetSpawnList(vegetation, size, offsetX, offsetY, startAmount, maxAmount, maxFailedAttempts, treeLine, heightMap, tempMap, humidityMap);
 
+        if (spawnList == null)
+            return;
+
         // Spawn plantables from spawn list
         int halfSize = WorldManager.Instance.size / 2;
         for (int i = 0; i < spawnList.Count; i++) {

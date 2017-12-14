@@ -16,7 +16,9 @@ public static class VegetationGenerator {
 
         // Start with a few random placed plantables
         int count = startAmount;
-        while (count > 0) {
+        int failedAttempts = 0;
+        while (count > 0 && failedAttempts < 100) {
+
             // Get random x and y values
             int x = rn.Next(0, size);
             int y = rn.Next(0, size);
@@ -28,11 +30,17 @@ public static class VegetationGenerator {
                 Plantable plantable = vegetation[rn.Next(0, vegetation.Length)];
                 spawnList.Add(new PlantableSpawnInfo(plantable, x, y));
                 count--;
+            } else {
+                failedAttempts++;
             }
         }
 
+        if (spawnList.Count == 0)
+            return null;
+
         // Grow more plantables based on the ones already placed
-        int currentPlantable = 0, failedAttempts = 0;
+        failedAttempts = 0;
+        int currentPlantable = 0;
         while (spawnList.Count < maxAmount && failedAttempts < maxFailedAttempts) {
             PlantableSpawnInfo spawnInfo = spawnList[currentPlantable];
 
