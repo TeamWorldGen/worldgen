@@ -40,6 +40,10 @@ public class UserInput : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Escape))
             MouseLook.Instance.lockCursor = false;
+        if(Input.GetKeyDown(KeyCode.E)) { // Only for testing
+            MouseLook.Instance.enabled = !MouseLook.Instance.enabled;
+            player.SetKinematic(!MouseLook.Instance.enabled);
+        }
 
         if (Input.GetKeyDown(KeyCode.Return))
             CustomNetworkManager.Instance.SpawnPlayer();

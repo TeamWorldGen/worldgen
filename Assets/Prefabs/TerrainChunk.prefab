@@ -23,6 +23,8 @@ GameObject:
   - component: {fileID: 23241780842340302}
   - component: {fileID: 64616497714330980}
   - component: {fileID: 114385785917648252}
+  - component: {fileID: 114205788082773438}
+  - component: {fileID: 114214236542755906}
   m_Layer: 0
   m_Name: TerrainChunk
   m_TagString: TerrainChunk
@@ -96,6 +98,40 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 0}
+--- !u!114 &114205788082773438
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1279929656076718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dbbd4c761d03ac4682618c4ae3d498f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startAmount: 15
+  maxAmount: 200
+  treeLine: 38
+  maxFailedAttempts: 100
+  vegetation:
+  - {fileID: 114962212751413416, guid: 47edb01ea0c70f347a08ec5db70d67ef, type: 2}
+  - {fileID: 114317567412530504, guid: 2cff60c52e8ee154b9909a3ffca1305e, type: 2}
+--- !u!114 &114214236542755906
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1279929656076718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1ed6d32ef2b7b2469ef54cda1e5c353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startAmount: 10
+  maxAmount: 100
+  maxFailedAttempts: 20
+  rocks:
+  - {fileID: 1207966010623184, guid: 25f10e8838d5dd344b6c0e0c94992f6f, type: 2}
 --- !u!114 &114385785917648252
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -113,11 +149,14 @@ MonoBehaviour:
     height: 2
     color: {r: 0.9191176, g: 0.80026627, b: 0.4122513, a: 0}
   - name: Grass
-    height: 10
+    height: 40
     color: {r: 0.11813366, g: 0.8455882, b: 0.24355689, a: 0}
   - name: Rock
-    height: 30
+    height: 100
     color: {r: 0.5588235, g: 0.5588235, b: 0.5588235, a: 0}
   - name: Snow
     height: 180
     color: {r: 1, g: 1, b: 1, a: 0}
+  size: 0
+  offsetX: 0
+  offsetY: 0

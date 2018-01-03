@@ -9,7 +9,7 @@ public class WorldManager : MonoBehaviour {
         get { return instance; }
     }
 
-    private int chunkSize = 100;
+    public readonly int chunkSize = 100;
     [Header("Chunk Settings")]
     public int chunksPerLine = 5;
     public int renderDistance = 5;
@@ -19,10 +19,12 @@ public class WorldManager : MonoBehaviour {
     public float heightMultiplier = 1f;
     public float scale = 1f;
     public int octaves;//each octave represents a coherent-noise function, which (in plural) the Perlin-noise function is made up of (integer of how many iterations)
-    [Range(0,1)]
-    public float persistance;//scales between 0(barren fields) and 1(overly bumpy landscape), (should be set to 0.5)
+    [Range(0, 1)]
+    public float persistence;//scales between 0(barren fields) and 1(overly bumpy landscape), (should be set to 0.5)
     public float lacunarity;//a multiplier that determines how quickly the frequency increases for each successive octave in the Perlin-noise function
     public AnimationCurve heightCurve;
+    public bool useFalloffMap = true;
+    public Texture2D falloffMapTexture;
 
     [Header("Other")]
     public Transform player;
@@ -32,11 +34,8 @@ public class WorldManager : MonoBehaviour {
     private TerrainChunk[,] chunks;
 
     public int size;
-    private int actualSize;
-    private int actualChunkSize;
-
-    public float[,] heightMap;
-    public float[,] falloffMap;
+    public int actualSize;
+    public int actualChunkSize;
 
     public static Queue<ChunkData> drawMeshQueue = new Queue<ChunkData>();
     private Queue<ChunkPos> createChunkQueue = new Queue<ChunkPos>();
@@ -44,10 +43,16 @@ public class WorldManager : MonoBehaviour {
     private bool ready = false;
     private bool chunksReady = false;
 
+    [Header("Editor Generation")]
+    [Range(1, 5)]
+    public int chunksPerLineInEditor = 1;
+
     void Awake() {
         instance = this;
 
-        Initialize();
+#if CLIENT
+        Initialize(); // Initialize locally if this is the client
+#endif
     }
 
     void OnValidate() {
@@ -59,6 +64,9 @@ public class WorldManager : MonoBehaviour {
         }
         if (renderDistance < 1) { // Render distance must be greater than 0
             renderDistance = 1;
+        }
+        if (chunksPerLine < 1) {
+            chunksPerLine = 1;
         }
     }
 
@@ -91,18 +99,33 @@ public class WorldManager : MonoBehaviour {
     }
 #endif
 
-    private void Initialize() {
+    public void Initialize() {
+        print("Initializing world manager...");
+
         size = chunkSize * chunksPerLine;
-        int length = size / chunkSize;
-        actualSize = size + length;
+        actualSize = size + chunksPerLine;
         actualChunkSize = chunkSize + 1;
 
-        falloffMap = FalloffMapGenerator.GenerateFalloffMap(actualSize);
-        heightMap = HeightMapGenerator.GenerateHeightMap(actualSize, seed, scale, octaves, persistance, lacunarity, heightMultiplier, heightCurve, falloffMap);
+        // Setup height map generator
+        HeightMapGenerator.seed = seed;
+        HeightMapGenerator.scale = scale;
+        HeightMapGenerator.octaves = octaves;
+        HeightMapGenerator.persistence = persistence;
+        HeightMapGenerator.lacunarity = lacunarity;
+        HeightMapGenerator.heightMultiplier = heightMultiplier;
+        HeightMapGenerator.heightCurve = heightCurve;
+        HeightMapGenerator.useFalloffMap = useFalloffMap;
+
+        FalloffMapGenerator.mapSize = actualSize;
+        FalloffMapGenerator.texture = falloffMapTexture;
+
+        BiomeMapGenerator.mapSize = actualSize;
     }
 
 #if CLIENT || UNITY_EDITOR
+
     public void CreateTerrainChunks() {
+        print("Creating terrain chunks...");
         chunks = new TerrainChunk[chunksPerLine, chunksPerLine];
         for (int y = 0; y < chunksPerLine; y++) {
             for (int x = 0; x < chunksPerLine; x++) {
@@ -112,20 +135,21 @@ public class WorldManager : MonoBehaviour {
         chunksReady = true;
     }
 
-    private void CreateTerrainChunk(int x, int y) {
-        // Get the chunk map for this chunk
-        float[,] chunkMap = GetChunkMap(heightMap, chunkSize * x, chunkSize * y);
+    private void CreateTerrainChunk(int x, int y, bool editor = false) {
 
         // Caculate spawn position for this chunk
         float startX = transform.position.x - (size / 2) + (chunkSize / 2);
         float startZ = transform.position.z + (size / 2) - (chunkSize / 2);
         Vector3 spawnPos = new Vector3(startX + chunkSize * x, 0, startZ - chunkSize * y);
 
-        // Spawn the chunk and generate its terrain
+        // Spawn the chunk
         TerrainChunk chunk = Instantiate(chunkPrefab, spawnPos, Quaternion.identity).GetComponent<TerrainChunk>();
         chunk.transform.parent = parent;
-        chunk.Initialize(chunkMap);
-        //chunk.UpdateChunk(1, false);
+
+        // Initialize the chunk
+        int offsetX = x * chunkSize;
+        int offsetY = y * chunkSize;
+        chunk.Initialize(actualChunkSize, offsetX, offsetY, editor);
 
         chunks[x, y] = chunk;
     }
@@ -158,8 +182,13 @@ public class WorldManager : MonoBehaviour {
                 if (dist <= renderDistance) {
                     int lod = GetLOD(dist);
                     UpdateChunk(x, y, true, lod);
+                    if (dist < 2)
+                        chunks[x, y].BuildPrefab();
+                    else
+                        chunks[x, y].ResetPrefab();
                 } else {
                     UpdateChunk(x, y, false, 24);
+                    chunks[x, y].ResetPrefab();
                 }
 
             }
@@ -171,9 +200,9 @@ public class WorldManager : MonoBehaviour {
         switch (dist) {
             case 0:
             case 1:
-                return 1;
+                return 4;
             case 2:
-                return 2;
+                return 4;
             case 3:
                 return 4;
             case 4:
@@ -196,17 +225,6 @@ public class WorldManager : MonoBehaviour {
     public void OnChunkUpdated(ChunkData data) {
         drawMeshQueue.Enqueue(data); // Add data to draw queue
     }
-
-    // Get the height map for a selected chunk
-    private float[,] GetChunkMap(float[,] heightMap, int startX, int startY) {
-        float[,] map = new float[actualChunkSize, actualChunkSize];
-        for (int y = 0; y < actualChunkSize; y++) {
-            for (int x = 0; x < actualChunkSize; x++) {
-                map[x, y] = heightMap[startX + x, startY + y];
-            }
-        }
-        return map;
-    }
 #endif
 
 #if UNITY_EDITOR
@@ -214,19 +232,23 @@ public class WorldManager : MonoBehaviour {
     //         EDITOR STUFF
     // ******************************
     public void OnEditorGenerate() {
-        /*
         OnEditorReset();
+        int temp = chunksPerLine;
+        chunksPerLine = chunksPerLineInEditor;
         Initialize();
         CreateTerrainChunks();
-        */
+        chunksPerLine = temp;
+
+        while (createChunkQueue.Count > 0) {
+            ChunkPos chunkPos = createChunkQueue.Dequeue();
+            CreateTerrainChunk(chunkPos.x, chunkPos.y, true);
+        }
     }
 
     public void OnEditorReset() {
-        /*
         foreach (GameObject chunk in GameObject.FindGameObjectsWithTag("TerrainChunk")) {
             DestroyImmediate(chunk);
         }
-        */
     }
 #endif
 
