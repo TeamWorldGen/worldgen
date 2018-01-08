@@ -6,6 +6,7 @@
 		_StrMap ("str map", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
+		_MapScale("map scale", float) = 10000
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" "DisableBatching"="True"}
@@ -20,7 +21,7 @@
 
 		sampler2D _MainTex;
 		sampler2D _DirMap, _StrMap; //In the temp solution with predefined maps that have rgb values per pixel, having two maps makes no sense. This is a relic from how it SHOULD be.
-		float _Wind_str, _Wind_dir;
+		float _Wind_str, _Wind_dir, _MapScale;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -40,8 +41,8 @@
 		void vert (inout appdata_full v) {
 			
 			float4 wp = mul (unity_ObjectToWorld, v.vertex);
-			float Wind_dir = tex2Dlod( _DirMap , float4(fmod(wp.x/1000 , 1), fmod(wp.z/1000 , 1), 0, 0)).r;
-			float Wind_str = tex2Dlod( _StrMap , float4(fmod(wp.x/1000 , 1), fmod(wp.z/1000 , 1), 0, 0)).g;
+			float Wind_dir = tex2Dlod( _DirMap , float4(fmod(wp.x/_MapScale , 1), fmod(wp.z/_MapScale , 1), 0, 0)).r;
+			float Wind_str = tex2Dlod( _StrMap , float4(fmod(wp.x/_MapScale , 1), fmod(wp.z/_MapScale , 1), 0, 0)).g;
 
 			half wind = Wind_str * (1 + (sin(wp.x + _Time.z*5*Wind_str)*sin(wp.z +_Time.w*5*Wind_str)*sin(wp.y + _Time.x*5*Wind_str))/5);
 			
