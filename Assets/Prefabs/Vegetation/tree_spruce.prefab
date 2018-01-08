@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 114253523925409052}
   - component: {fileID: 114816355658349060}
   m_Layer: 0
-  m_Name: SpruceTree
+  m_Name: tree_spruce
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,7 +377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a3721190e59543af31bb10d91953d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fertility: 1
+  fertility: 0.8
   spread: 5
   minTemp: 0.1
   maxTemp: 0.5

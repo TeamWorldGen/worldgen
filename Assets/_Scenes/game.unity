@@ -557,6 +557,7 @@ MonoBehaviour:
   vegetation:
   - {fileID: 114652023081399606, guid: 205de3015e533274589c2181e03e3e06, type: 2}
   - {fileID: 114816355658349060, guid: dae7449b81528264c8632b9420985834, type: 2}
+  - {fileID: 114949968497185668, guid: 67c7117a509ad9c4886082ce57d10443, type: 2}
 --- !u!224 &654696769 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22458840, guid: 61f00a819c0a5a546b7eea7a104470d7,

@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 4653244555274168}
   - component: {fileID: 114317567412530504}
   m_Layer: 0
-  m_Name: TallGrass
+  m_Name: grass_tall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

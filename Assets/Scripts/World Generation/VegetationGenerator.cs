@@ -17,7 +17,7 @@ public static class VegetationGenerator {
         // Start with a few random placed plantables
         int count = startAmount;
         int failedAttempts = 0;
-        while (count > 0 && failedAttempts < 100) {
+        while (count > 0 && failedAttempts < maxFailedAttempts) {
 
             // Get random x and y values
             int x = rn.Next(0, size);
@@ -25,9 +25,11 @@ public static class VegetationGenerator {
 
             // Check tree line
             float height = heightMap[x, y];
-            if (height <= treeLine) {
+            Plantable plantable = vegetation[rn.Next(0, vegetation.Length)];
+            float probability = CalculateSpawnProbability(plantable, x, y, tempMap, humidityMap);
+            if (rn.Next(101) < probability * 100 && height <= treeLine) {
                 // Add plantable to spawn list
-                Plantable plantable = vegetation[rn.Next(0, vegetation.Length)];
+                //Plantable plantable = vegetation[rn.Next(0, vegetation.Length)];
                 spawnList.Add(new PlantableSpawnInfo(plantable, x, y));
                 count--;
             } else {

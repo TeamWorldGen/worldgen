@@ -116,6 +116,7 @@ MonoBehaviour:
   vegetation:
   - {fileID: 114962212751413416, guid: 47edb01ea0c70f347a08ec5db70d67ef, type: 2}
   - {fileID: 114317567412530504, guid: 2cff60c52e8ee154b9909a3ffca1305e, type: 2}
+  - {fileID: 114127020295111750, guid: f4e42e7b1541e174db1cff979dbdac49, type: 2}
 --- !u!114 &114214236542755906
 MonoBehaviour:
   m_ObjectHideFlags: 1

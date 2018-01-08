@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 114400327190548908}
   - component: {fileID: 114652023081399606}
   m_Layer: 0
-  m_Name: Tree
+  m_Name: tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -471,7 +471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278a3721190e59543af31bb10d91953d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fertility: 0.5
+  fertility: 0.6
   spread: 8
   minTemp: 0.3
   maxTemp: 0.7
