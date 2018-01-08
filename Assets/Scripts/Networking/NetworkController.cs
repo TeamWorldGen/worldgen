@@ -31,7 +31,7 @@ public class NetworkController : MonoBehaviour {
 
             string size = getCommandArgument("size");
             string seed = getCommandArgument("seed");
-            manager.worldSize = (size != null) ? int.Parse(size) : 100;
+            manager.worldSize = (size != null) ? int.Parse(size) : 5;
             manager.worldSeed = (seed != null) ? int.Parse(seed) : 0;
 
             string address = getCommandArgument("address");
@@ -58,19 +58,21 @@ public class NetworkController : MonoBehaviour {
         } else { // If batchmode argument is not found
 
 #if CLIENT
+
             LoadingScreen.Show();
             LoadingScreen.SetSubtitle("Connecting to server...");
             string address = GlobalStorage.connectAddress;
             int port = GlobalStorage.connectPort;
 
 #if TESTING
-            // Start host (only for quick testing in editor)
-            StartHost(address, port);
-#else
-            // Start client
-            ConnectToServer(address, port);
+            GlobalStorage.host = true;
 #endif
 
+            if (GlobalStorage.host) {
+                StartHost(address, port);
+            } else {
+                ConnectToServer(address, port);
+            }
 
 #elif SERVER
             // Quit the application if the server build is not started in batchmode
@@ -112,28 +114,30 @@ public class NetworkController : MonoBehaviour {
 
 #endif
 
-#if TESTING
+    public void BuildDynamicWorld() {
+
+        WorldManager.Instance.seed = CustomNetworkManager.Instance.worldSeed;
+        WorldManager.Instance.chunksPerLine = CustomNetworkManager.Instance.worldSize;
+        WorldManager.Instance.Initialize();
+
+        UnityEngine.Debug.Log("Building dynamic world...");
+        NetworkSpawner.Instance.Initialize();
+        NetworkSpawner.Instance.BuildVegetation();
+    }
+
+#if CLIENT
     public void StartHost(string address, int port) {
         CustomNetworkManager manager = CustomNetworkManager.Instance;
         manager.networkAddress = address;
         manager.networkPort = port;
+        manager.worldSeed = GlobalStorage.seed;
+        manager.worldSize = GlobalStorage.size;
         manager.StartHost();
         manager.client.RegisterHandler(100, OnCreateWorld);
 
         BuildDynamicWorld();
     }
-#endif
 
-#if SERVER || TESTING
-    public void BuildDynamicWorld() {
-        WorldManager.Instance.Initialize();
-        UnityEngine.Debug.Log("Building dynamic world...");
-        NetworkSpawner.Instance.Initialize();
-        NetworkSpawner.Instance.BuildVegetation();
-    }
-#endif
-
-#if CLIENT
     public void ConnectToServer(string address, int port) {
         CustomNetworkManager manager = CustomNetworkManager.Instance;
         manager.networkAddress = address;
@@ -147,7 +151,10 @@ public class NetworkController : MonoBehaviour {
         // Read net message
         WorldGenMessage message = netMessage.ReadMessage<WorldGenMessage>();
 
-        // TODO: Use seed and size from net message
+        // Set world seed and size in WorldManager
+        WorldManager.Instance.seed = message.seed;
+        WorldManager.Instance.chunksPerLine = message.size;
+        WorldManager.Instance.Initialize();
 
         // Create chunks
         WorldManager.Instance.CreateTerrainChunks();

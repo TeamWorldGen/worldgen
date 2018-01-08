@@ -51,7 +51,7 @@ public class WorldManager : MonoBehaviour {
         instance = this;
 
 #if CLIENT
-        Initialize(); // Initialize locally if this is the client
+        //Initialize(); // Initialize locally if this is the client
 #endif
     }
 

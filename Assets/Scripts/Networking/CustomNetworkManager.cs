@@ -4,7 +4,8 @@ using UnityEngine.Networking;
 [DisallowMultipleComponent]
 public class CustomNetworkManager : NetworkManager {
 
-    public int worldSize = 100;
+    // size and seed that is stored on the server and sent to clients
+    public int worldSize = 5;
     public int worldSeed = 0;
 
     private static CustomNetworkManager instance;
@@ -16,7 +17,6 @@ public class CustomNetworkManager : NetworkManager {
         instance = this;
     }
 
-#if SERVER
     public override void OnServerConnect(NetworkConnection conn) {
         WorldGenMessage message = new WorldGenMessage();
         Debug.Log("Client connected: " + conn.connectionId);
@@ -42,7 +42,6 @@ public class CustomNetworkManager : NetworkManager {
         base.OnServerRemovePlayer(conn, player);
         Debug.Log("Removing player " + conn.address);
     }
-#endif
 
 #if CLIENT
     public override void OnClientDisconnect(NetworkConnection conn) {

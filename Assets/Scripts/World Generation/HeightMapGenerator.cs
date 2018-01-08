@@ -14,16 +14,6 @@ public static class HeightMapGenerator {
     public static float[,] GetHeightMap(int size, int offsetX, int offsetY, float[,] falloffMap) {
         float[,] heightMap = new float[size, size];
 
-        /*
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                float sampleX = (float)(offsetX + x) / 100f;
-                float sampleY = (float)(offsetY + y) / 100f;
-                heightMap[x, y] = Mathf.PerlinNoise(sampleX, sampleY) * heightMultiplier;
-            }
-        }
-        */
-
         float amplitude = 1;
         float maxHeight = 0;
 

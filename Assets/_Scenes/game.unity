@@ -1360,7 +1360,7 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  worldSize: 100
+  worldSize: 5
   worldSeed: 0
 --- !u!114 &1546854430
 MonoBehaviour:

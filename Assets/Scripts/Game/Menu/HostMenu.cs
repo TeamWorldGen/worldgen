@@ -3,28 +3,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class ConnectMenu : MonoBehaviour {
+public class HostMenu : MonoBehaviour {
 
     public GameObject canvas;
     public GameObject mainCanvas;
 
-    public InputField addressInput;
-    public InputField portInput;
+    public InputField seedInput;
+    public InputField sizeInput;
     public InputField nameInput;
 
-    public Button connectButton;
+    public Button hostButton;
     public Button cancelButton;
 
     void Awake() {
-        connectButton.onClick.AddListener(OnConnect);
+        hostButton.onClick.AddListener(OnHost);
         cancelButton.onClick.AddListener(OnCancel);
     }
 
-    private void OnConnect() {
-        GlobalStorage.connectAddress = addressInput.text;
-        GlobalStorage.connectPort = int.Parse(portInput.text);
+    private void OnHost() {
+        GlobalStorage.seed = int.Parse(seedInput.text);
+        GlobalStorage.size = int.Parse(sizeInput.text);
         GlobalStorage.localPlayerName = (string.IsNullOrEmpty(nameInput.text)) ? "Player" : nameInput.text;
-        GlobalStorage.host = false;
+        GlobalStorage.host = true;
         SceneManager.LoadScene("game");
     }
 
