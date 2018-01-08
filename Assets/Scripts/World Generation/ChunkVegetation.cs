@@ -56,15 +56,14 @@ public class ChunkVegetation : MonoBehaviour {
             float zPos = halfSize - (offsetY + spawnInfo.y);
             float yPos = heightMap[spawnInfo.x, spawnInfo.y];
             Vector3 spawnPos = new Vector3(xPos, yPos, zPos);
-            SpawnPrefab(spawnInfo.plantable.gameObject, spawnPos);
+            SpawnPrefab(spawnInfo.plantable.gameObject, spawnPos, spawnInfo.rotation);
         }
 
     }
 
     // Spawn a prefab with random rotation and a small variation in scale
-    public void SpawnPrefab(GameObject prefab, Vector3 pos) {
+    public void SpawnPrefab(GameObject prefab, Vector3 pos, Quaternion rotation) {
         float scale = Random.Range(0.8f, 1.2f);
-        Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
         GameObject obj = Instantiate(prefab, pos, rotation);
         if (parent != null)
             obj.transform.parent = parent;

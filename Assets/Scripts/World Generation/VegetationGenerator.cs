@@ -29,8 +29,8 @@ public static class VegetationGenerator {
             float probability = CalculateSpawnProbability(plantable, x, y, tempMap, humidityMap);
             if (rn.Next(101) < probability * 100 && height <= treeLine) {
                 // Add plantable to spawn list
-                //Plantable plantable = vegetation[rn.Next(0, vegetation.Length)];
-                spawnList.Add(new PlantableSpawnInfo(plantable, x, y));
+                Quaternion rotation = Quaternion.Euler(new Vector3(0, rn.Next(0, 360), 0));
+                spawnList.Add(new PlantableSpawnInfo(plantable, x, y, rotation));
                 count--;
             } else {
                 failedAttempts++;
@@ -63,7 +63,8 @@ public static class VegetationGenerator {
                 float probability = CalculateSpawnProbability(spawnInfo.plantable, newX, newY, tempMap, humidityMap);
                 if (rn.Next(101) < probability * 100) {
                     // Add plantable to spawn list
-                    PlantableSpawnInfo newSpawnInfo = new PlantableSpawnInfo(spawnInfo.plantable, newX, newY);
+                    Quaternion rotation = Quaternion.Euler(new Vector3(0, rn.Next(0, 360), 0));
+                    PlantableSpawnInfo newSpawnInfo = new PlantableSpawnInfo(spawnInfo.plantable, newX, newY, rotation);
                     spawnList.Add(newSpawnInfo);
                 } else {
                     failedAttempts++;
@@ -97,9 +98,11 @@ public static class VegetationGenerator {
 public struct PlantableSpawnInfo {
     public Plantable plantable;
     public int x, y;
-    public PlantableSpawnInfo(Plantable plantable, int x, int y) {
+    public Quaternion rotation;
+    public PlantableSpawnInfo(Plantable plantable, int x, int y, Quaternion rotation) {
         this.plantable = plantable;
         this.x = x;
         this.y = y;
+        this.rotation = rotation;
     }
 }
