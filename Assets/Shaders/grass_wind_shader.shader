@@ -1,7 +1,4 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-
-Shader "Custom/grass_wind_shader" {
+﻿Shader "Custom/grass_wind_shader" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
@@ -9,12 +6,9 @@ Shader "Custom/grass_wind_shader" {
 		_StrMap ("str map", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
-		_Wind_str("str", range(0,1)) = 0.5
-		_Wind_dir("dir", range(0,1)) = 0.5
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" "DisableBatching"="True"}
-
 		LOD 200
 		
 		CGPROGRAM
@@ -25,10 +19,8 @@ Shader "Custom/grass_wind_shader" {
 		#pragma target 3.0
 
 		sampler2D _MainTex;
-		sampler2D _DirMap;
-		sampler2D _StrMap;
+		sampler2D _DirMap, _StrMap; //In the temp solution with predefined maps that have rgb values per pixel, having two maps makes no sense. This is a relic from how it SHOULD be.
 		float _Wind_str, _Wind_dir;
-		float originx, originz, originy;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -47,15 +39,18 @@ Shader "Custom/grass_wind_shader" {
 
 		void vert (inout appdata_full v) {
 			
-			float3 wp = mul (unity_ObjectToWorld, v.vertex).xyz;
+			float4 wp = mul (unity_ObjectToWorld, v.vertex);
 			float Wind_dir = tex2Dlod( _DirMap , float4(fmod(wp.x/1000 , 1), fmod(wp.z/1000 , 1), 0, 0)).r;
-			float Wind_str = tex2Dlod( _StrMap , float4(fmod(wp.x/1000 , 1), fmod(wp.z/1000 , 1), 0, 0)).g*3;
+			float Wind_str = tex2Dlod( _StrMap , float4(fmod(wp.x/1000 , 1), fmod(wp.z/1000 , 1), 0, 0)).g;
 
 			half wind = Wind_str * sin(v.vertex.y)* (1 + (sin(wp.x + _Time.z*5*Wind_str)*sin(wp.z +_Time.w*5*Wind_str))/5);
 			
-			v.vertex.x -= wind * sin(2*3.14* (Wind_dir+originy/360));
-			v.vertex.z -= wind * cos(2*3.14*(Wind_dir+originy/360));
-			v.vertex.y -= wind;
+			wp.x -= wind * sin(2*3.14* Wind_dir);
+			wp.z -= wind * cos(2*3.14*Wind_dir);
+			wp.y -= wind;
+
+			v.vertex = mul (unity_WorldToObject, wp);
+
 		}
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {

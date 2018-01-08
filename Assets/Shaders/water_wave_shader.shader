@@ -1,4 +1,4 @@
-﻿Shader "Custom/ripple_shader" {
+﻿Shader "Custom/water_wave_shader" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
@@ -6,11 +6,9 @@
 		_StrMap ("str map", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
-		_Wind_str("str", range(0,1)) = 0.5
-		_Wind_dir("dir", range(0,1)) = 0.5
 	}
 	SubShader {
-		Tags { "RenderType"="Opaque" }
+		Tags { "RenderType"="Opaque" "DisableBatching"="True"}
 		LOD 200
 		
 		CGPROGRAM
@@ -21,8 +19,7 @@
 		#pragma target 3.0
 
 		sampler2D _MainTex;
-		sampler2D _DirMap;
-		sampler2D _StrMap;
+		sampler2D _DirMap, _StrMap; //In the temp solution with predefined maps that have rgb values per pixel, having two maps makes no sense. This is a relic from how it SHOULD be.
 		float _Wind_str, _Wind_dir;
 
 		struct Input {
@@ -43,18 +40,16 @@
 		void vert (inout appdata_full v) {
 			
 			float3 wp = mul (unity_ObjectToWorld, v.vertex).xyz;
-			float Wind_dir = tex2Dlod( _DirMap , float4(fmod(wp.x/1000 , 1), fmod(wp.z/1000 , 1), 0, 0)).r;
-			float Wind_str = tex2Dlod( _StrMap , float4(fmod(wp.x/1000 , 1), fmod(wp.z/1000 , 1), 0, 0)).g*3;
+			float Wind_dir = tex2Dlod( _DirMap , float4(fmod(wp.x/10000 , 1), fmod(wp.z/10000 , 1), 0, 0)).r;
+			float Wind_str = tex2Dlod( _StrMap , float4(fmod(wp.x/10000 , 1), fmod(wp.z/10000 , 1), 0, 0)).g;
 
+			half value = Wind_str * sin(_Time.w*Wind_str*2 + Wind_str*(sin(2*3.14*_Wind_dir)*wp.x + cos(2*3.14*_Wind_dir)*wp.z))  + sin(wp.x*5 + _Time.w)*cos(wp.z*5*Wind_str + _Time.w)/9*Wind_str;
 
-			float offset = sin(2*3.14*_Wind_dir)*wp.x + cos(2*3.14*_Wind_dir)*wp.z;
+			wp.x -= sin(2*3.14*Wind_dir)*value/2;
+			wp.z -= cos(2*3.14*Wind_dir)*value/2;
+			wp.y += value;
 
-			float value = Wind_str * sin(_Time.w*Wind_str*2 + Wind_str*offset)  + sin(wp.x*5 + _Time.w)*cos(wp.z*5*Wind_str + _Time.w)/9*Wind_str;
-
-			v.vertex.x -= sin(2*3.14*Wind_dir)*value/2;
-			v.vertex.z -= cos(2*3.14*Wind_dir)*value/2;
-			v.vertex.y += value;
-
+			v.vertex = mul (unity_WorldToObject, wp);
 		}
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
