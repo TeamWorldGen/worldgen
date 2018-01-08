@@ -36,7 +36,7 @@ ModelImporter:
     4300004: Platonic_2_3
     4300006: Cylinder
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
